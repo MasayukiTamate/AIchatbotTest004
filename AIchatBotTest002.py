@@ -17,6 +17,22 @@ class xy:#xyクラス
         self.x = x
         self.y = y
         pass
+
+class hantei:
+    def __init__(self, x,y, sizeX, sizeY):
+        self.x = x
+        self.y = y
+        self.sizeX = sizeX
+        self.sizeY = sizeY
+        pass
+    def hantei(self, x, y):
+        flag = False
+        if x > self.x and x < self.x + self.sizeX:
+            if y > self.y and y < self.y + self.sizeY:
+                flag = True
+
+        return flag
+        
 #作成予定クラス
 #文字列と文字サイズを引数にして文字を中央に表示する座標を戻り値にする
 #本編
@@ -39,6 +55,20 @@ class App:
         pyxel.mouse(True)
         self.writer = puf.Writer("misaki_gothic.ttf")#フォントを指定
         self.number = 0
+
+
+
+#判定つくり
+#initに送る
+        self.selecttaitle = 0
+        self.titelselecthantei = []
+        x = 300
+        y = 400
+        for i in range(3):
+
+            self.titelselecthantei.append(hantei(x, y, 60, 20))
+            y = y + 50
+
         pyxel.run(self.update, self.draw)
 
         pass
@@ -55,6 +85,13 @@ class App:
         #マウス判定
         x = pyxel.mouse_x
         y = pyxel.mouse_y
+        no = 0
+        for i in self.titelselecthantei:
+            if i.hantei(x,y):
+                self.selecttaitle = no
+
+            no = no + 1
+
         pass
     
     #表示
@@ -76,6 +113,9 @@ class App:
             case 0:#終了
                 pass
             case 1:#タイトル
+
+
+
                 mojiretu = "始める","終わる","設定"
                 pyxel.cls(pyxel.COLOR_DARK_BLUE)
                 self.writer.draw(100,100, "AIエージェント", 150,pyxel.COLOR_WHITE)
@@ -85,15 +125,11 @@ class App:
                     y = y + 50
                 
                 #カーソル関係
-                ac = self.AnimetionCursor
+
                 x = 300 - 50
                 y = 400 + 50
-                pyxel.rect(x, y, 50 -10 + ac * 1, 50 -10 , 8)
-                self.AnimetionCursor = self.AnimetionCursor + 1 * self.hanten
-                if self.AnimetionCursor == 5 or self.AnimetionCursor == 0:
-                    self.hanten = self.hanten * -1
-
-
+                pyxel.rect(x, y + (50 * self.selecttaitle) -10, 50 -10, 50 -10 , 8)
+                self.writer.draw(0,0,f"{self.selecttaitle=} {pyxel.mouse_x=} { pyxel.mouse_y=}", 30, pyxel.COLOR_BLACK)
 
                 pass
             case 2:#メイン
